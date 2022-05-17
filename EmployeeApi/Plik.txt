@@ -1,0 +1,2 @@
+piotr;kaciuczyk;4000
+paweł;gładysz;6000
