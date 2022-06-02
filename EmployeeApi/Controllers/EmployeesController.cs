@@ -52,22 +52,48 @@ namespace EmployeeApi.Controllers
 
         [HttpDelete]
         [Route("deleteEmployee")]
-        public void DeleteEmployee(EmployeeDto employee)
+        public IActionResult DeleteEmployee(string firstName, string lastName)
         {
-            Employee employee1 = new Employee();
-            employee1.FirstName = employee.FirstName;
-            employee1.LastName = employee.LastName;
-            employee1.Salary = employee.Salary;
-            //Employee employee1 = _employeeRepository.GetEmployeeByFirstNameAndLastName(employee.FirstName, employee.LastName);
+            Employee employee = _employeeRepository.GetEmployeeByFirstNameAndLastName(firstName, lastName);
 
-            _employeeRepository.DeleteEmployee(_employeeRepository.GetEmployeeByFirstNameAndLastName(employee1.FirstName, employee1.LastName));
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _employeeRepository.DeleteEmployee(employee);
+                return Ok();
+            }
+
+            
         }
 
         [HttpPut]
-        [Route("replaceEmployee")]
+        [Route("replaceEmployee ")]
 
-        public void ReplaceEmployee()
+        public IActionResult ReplaceEmployee(EmployeeDto employee, string firstName, string lastName)
         {
+            Employee employeeToEdit = _employeeRepository.GetEmployeeByFirstNameAndLastName(firstName, lastName);
+
+            if (employeeToEdit == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _employeeRepository.DeleteEmployee(employeeToEdit);
+
+
+                employeeToEdit.FirstName = employee.FirstName;
+                employeeToEdit.LastName = employee.LastName;
+                employeeToEdit.Salary = employee.Salary;
+
+                _employeeRepository.AddEmployee(employeeToEdit);
+
+                return Ok();
+            }
+
 
         }
         

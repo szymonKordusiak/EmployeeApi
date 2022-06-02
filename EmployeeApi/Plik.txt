@@ -1,1 +1,3 @@
-Patryk;3;12000
+3;Piotr;Łotr;1200
+1;Przemek;Klimek;6000
+0;Patryk;Brzozowiec;12000

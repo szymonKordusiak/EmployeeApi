@@ -10,29 +10,36 @@ namespace ConsoleApp4
     public class EmployeeFileRepository : IEmployeeRepository
     {
         private static readonly string fileName = "Plik.txt";
-        
+
         public void AddEmployee(Employee employee)
         {
-            
+
             using (var sw = new StreamWriter(fileName, true))
             {
-                sw.WriteLine($"{employee.FirstName};{employee.LastName};{employee.Salary}");
-            }  
+                sw.WriteLine($"{employee.Id};{employee.FirstName};{employee.LastName};{employee.Salary}");
+
+
+            }
         }
 
         public void DeleteEmployee(Employee employee)
         {
             var employees = GetEmployees();
-            
-            employees.Remove(employee);
 
-            foreach(Employee emp in employees)
+            var employeeToRemove = employees.Where(x => x.FirstName == employee.FirstName && x.LastName == employee.LastName).FirstOrDefault();
+
+            employees.Remove(employeeToRemove);
+
+
+
+            using (var sw = new StreamWriter(fileName, false))
             {
-                using (var sw = new StreamWriter(fileName, false))
+                foreach (Employee emp in employees)
                 {
-                    sw.WriteLine($"{emp.FirstName};{emp.LastName};{emp.Salary}");
+                    sw.WriteLine($"{emp.Id};{emp.FirstName};{emp.LastName};{emp.Salary}");
                 }
             }
+
 
             Console.WriteLine("Usunięto pomyślnie pracownika");
             Console.WriteLine();
@@ -41,7 +48,7 @@ namespace ConsoleApp4
 
         public Employee GetEmployeeByFirstNameAndLastName(string firstName, string lastName)
         {
-             
+
             return this.GetEmployees().FirstOrDefault(x => x.FirstName == firstName && x.LastName == lastName);
         }
 
@@ -55,16 +62,17 @@ namespace ConsoleApp4
 
                 while (!sr.EndOfStream)
                 {
-                    
+
 
                     string line = sr.ReadLine();
 
                     string[] parts = line.Split(';');
 
                     Employee employee = new Employee();
-                    employee.FirstName = parts[0];
-                    employee.LastName = parts[1];
-                    employee.Salary = decimal.Parse(parts[2]);
+                    employee.Id = int.Parse(parts[0]);
+                    employee.FirstName = parts[1];
+                    employee.LastName = parts[2];
+                    employee.Salary = decimal.Parse(parts[3]);
 
                     employees.Add(employee);
                 }
