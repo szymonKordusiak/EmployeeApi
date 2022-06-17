@@ -1,4 +1,5 @@
 ﻿using ConsoleApp4;
+using Domain;
 using EmployeeApi.Dtos;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace EmployeeApi.Controllers
         public EmployeesController()
         {
             
-            _employeeRepository = new EmployeeFileRepository();
+            _employeeRepository = new EmployeeDBRepository();
             _employeeService = new EmployeeService(_employeeRepository);
         }
         [HttpGet]
@@ -46,6 +47,13 @@ namespace EmployeeApi.Controllers
             employee1.FirstName = employee.FirstName;
             employee1.LastName = employee.LastName;
             employee1.Salary = employee.Salary;
+            employee1.Departments = new Department()
+            {
+                DepartmentID = employee.DepartmentDto.DepartmentID,
+                Address = employee.DepartmentDto.Address,
+                Name = employee.DepartmentDto.Name,
+            };
+            
 
             _employeeRepository.AddEmployee(employee1);
         }

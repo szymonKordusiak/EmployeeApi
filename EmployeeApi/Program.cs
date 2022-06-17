@@ -1,3 +1,5 @@
+global using EmployeeApi.Controllers;
+using Domain;
 using EmployeeApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace ConsoleApp4
 {
@@ -19,10 +22,12 @@ namespace ConsoleApp4
             // Add services to the container.
 
             builder.Services.AddControllers();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors(options => { options.AddDefaultPolicy(policy => { policy.WithOrigins("*"); }); });
+
             var app = builder.Build();
             app.UseCors();
             // Configure the HTTP request pipeline.
@@ -38,9 +43,10 @@ namespace ConsoleApp4
 
             app.MapControllers();
 
+
             app.Run();
 
-
+            
 
             ProgramUI ui = new ProgramUI();
             IEmployeeRepository employeeRepository = new EmployeeFileRepository();
