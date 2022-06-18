@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EmployeeApi.Controllers
 {
@@ -27,9 +28,24 @@ namespace EmployeeApi.Controllers
         }
         [HttpGet]
 
-        public IEnumerable<Employee> Get()
+        public IEnumerable<EmployeeDto> Get()
         {
-            return _employeeRepository.GetEmployees();
+
+            var queries = _employeeRepository.GetEmployees();
+
+            return queries.Select(x => new EmployeeDto
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Salary = x.Salary,
+                DepartmentDto = new DepartmentDto()
+                {
+                    Id = x.DepartmentID,
+                    Address = x.Departments.Address,
+                    Name = x.Departments.Name,
+                }
+            } );
         }
 
         [HttpGet]
@@ -44,16 +60,19 @@ namespace EmployeeApi.Controllers
         public void AddEmployee(EmployeeDto employee)
         {
             Employee employee1 = new Employee();
+
             employee1.FirstName = employee.FirstName;
             employee1.LastName = employee.LastName;
             employee1.Salary = employee.Salary;
+
             employee1.Departments = new Department()
             {
-                DepartmentID = employee.DepartmentDto.DepartmentID,
+                DepartmentID = employee.DepartmentDto.Id,
                 Address = employee.DepartmentDto.Address,
                 Name = employee.DepartmentDto.Name,
             };
             
+
 
             _employeeRepository.AddEmployee(employee1);
         }

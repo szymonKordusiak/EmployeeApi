@@ -17,7 +17,7 @@ namespace ConsoleApp4
 
             using (var sw = new StreamWriter(fileName, true))
             {
-                sw.WriteLine($"{employee.EmployeeID};{employee.FirstName};{employee.LastName};{employee.Salary}");
+                sw.WriteLine($"{employee.Id};{employee.FirstName};{employee.LastName};{employee.Salary}");
 
 
             }
@@ -37,7 +37,7 @@ namespace ConsoleApp4
             {
                 foreach (Employee emp in employees)
                 {
-                    sw.WriteLine($"{emp.EmployeeID};{emp.FirstName};{emp.LastName};{emp.Salary}");
+                    sw.WriteLine($"{emp.Id};{emp.FirstName};{emp.LastName};{emp.Salary}");
                 }
             }
 
@@ -70,7 +70,7 @@ namespace ConsoleApp4
                     string[] parts = line.Split(';');
 
                     Employee employee = new Employee();
-                    employee.EmployeeID = int.Parse(parts[0]);
+                    employee.Id = int.Parse(parts[0]);
                     employee.FirstName = parts[1];
                     employee.LastName = parts[2];
                     employee.Salary = decimal.Parse(parts[3]);

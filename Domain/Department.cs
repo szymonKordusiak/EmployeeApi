@@ -8,6 +8,10 @@ namespace Domain
 {
     public class Department
     {
+        public Department()
+        {
+            this.Employees = new HashSet<Employee>();
+        }
         public int DepartmentID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

@@ -13,6 +13,13 @@ namespace EmployeeApi
         {
             using (var context = new EmployeeContext())
             {
+                if(employee.Departments.DepartmentID > 0)
+                {
+                    if( context.Departments.Any(x => x.DepartmentID == employee.Departments.DepartmentID) )
+                    {
+                        employee.Departments = context.Departments.FirstOrDefault(x => x.DepartmentID == employee.Departments.DepartmentID);
+                    }
+                }
                 context.Employees.Add(employee);
                 context.SaveChanges();
 
@@ -24,7 +31,7 @@ namespace EmployeeApi
 
             using (var context = new EmployeeContext())
             {
-                var employeeDB = context.Employees.FirstOrDefault(emp => emp.EmployeeID == employee.EmployeeID);
+                var employeeDB = context.Employees.FirstOrDefault(emp => emp.Id == employee.Id);
 
                 context.Employees.Remove(employeeDB);
                 context.SaveChanges();
@@ -47,28 +54,9 @@ namespace EmployeeApi
             
             using (var context = new EmployeeContext())
             {
-                
-                var query = (from emp in context.Employees select new EmployeeDto
-                {
-                    EmployeeID = emp.EmployeeID,
-                    FirstName = emp.FirstName,
-                    LastName = emp.LastName,
-                    Salary = emp.Salary,
+                                
 
-                }).ToList().Select(x => new Employee
-                { 
-                    EmployeeID = x.EmployeeID,
-                    FirstName = x.FirstName, 
-                    LastName = x.LastName, 
-                    Salary = x.Salary,
-                    Departments = new Department()
-                    {
-                        DepartmentID = x.DepartmentID,
-                        
-                    }
-                }).ToList();
-
-            return query;
+            return context.Employees.Include(x => x.Departments).ToList();
             }
         }
 
